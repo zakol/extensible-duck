@@ -83,6 +83,18 @@ function assignDefaults(options) {
   }
 }
 
+function prepareSelectors(duck, selectors) {
+  const attachedSelectors = {}
+  Object.keys(selectors).forEach(key => {
+    const selector = selectors[key]
+    attachedSelectors[key] = (globalState) => {
+      const localState = globalState[duck.options.store]
+      selector(localState, globalState)
+    }
+  })
+  return attachedSelectors
+}
+
 /**
  * Helper utility to assist in composing the selectors.
  * Previously defined selectors can be used to derive future selectors.
@@ -127,7 +139,7 @@ export default class Duck {
       ? initialState(this)
       : initialState
     this.reducer = this.reducer.bind(this)
-    this.selectors = deriveSelectors(selectors)
+    this.selectors = prepareSelectors(this, deriveSelectors(selectors))
     this.creators = creators(this)
   }
   reducer(state, action) {
