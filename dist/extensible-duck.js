@@ -217,7 +217,11 @@ function constructLocalized(selectors) {
     Object.keys(derivedSelectors).forEach(function (key) {
       var selector = derivedSelectors[key];
       localizedSelectors[key] = function (globalState) {
-        return selector(globalState[duck.store], globalState);
+        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+          args[_key2 - 1] = arguments[_key2];
+        }
+
+        return selector.apply(undefined, [globalState[duck.store], globalState].concat(args));
       };
     });
     return localizedSelectors;

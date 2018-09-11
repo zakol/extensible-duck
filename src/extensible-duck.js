@@ -97,7 +97,7 @@ export function constructLocalized(selectors) {
     const localizedSelectors = {}
     Object.keys(derivedSelectors).forEach(key => {
       const selector = derivedSelectors[key]
-      localizedSelectors[key] = (globalState) => selector(globalState[duck.store], globalState)
+      localizedSelectors[key] = (globalState, ...args) => selector(globalState[duck.store], globalState, ...args)
     })
     return localizedSelectors
   }
